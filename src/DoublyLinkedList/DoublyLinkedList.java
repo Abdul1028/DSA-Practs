@@ -15,7 +15,6 @@ public class DoublyLinkedList {
     private Node tail;
     private int size;
 
-    // Add node at the front
     public void addFront(int data) {
         Node newNode = new Node(data);
         if (head == null) {
@@ -28,7 +27,6 @@ public class DoublyLinkedList {
         size++;
     }
 
-    // Add node at the back
     public void addBack(int data) {
         Node newNode = new Node(data);
         if (tail == null) {
@@ -41,7 +39,6 @@ public class DoublyLinkedList {
         size++;
     }
 
-    // Insert node at a specific position
     public void insertAtPosition(int data, int position) {
         if (position < 0 || position > size) {
             System.out.println("Invalid position.");
@@ -69,7 +66,6 @@ public class DoublyLinkedList {
         size++;
     }
 
-    // Delete node from the front
     public int deleteFront() {
         if (head == null) {
             System.out.println("List is empty.");
@@ -86,7 +82,6 @@ public class DoublyLinkedList {
         return data;
     }
 
-    // Delete node from the back
     public int deleteBack() {
         if (tail == null) {
             System.out.println("List is empty.");
@@ -103,7 +98,6 @@ public class DoublyLinkedList {
         return data;
     }
 
-    // Delete node at a specific position
     public int deleteAtPosition(int position) {
         if (position < 0 || position >= size) {
             System.out.println("Invalid position.");
@@ -128,7 +122,7 @@ public class DoublyLinkedList {
         return data;
     }
 
-    // Display the list
+
     public void display() {
         if (head == null) {
             System.out.println("List is empty.");
@@ -142,12 +136,11 @@ public class DoublyLinkedList {
         System.out.println("END");
     }
 
-    // Constructor
+
     public DoublyLinkedList() {
         this.size = 0;
     }
 
-    // Main function with menu-driven loop
     public static void main(String[] args) {
         DoublyLinkedList dll = new DoublyLinkedList();
         Scanner sc = new Scanner(System.in);
