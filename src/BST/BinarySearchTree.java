@@ -3,6 +3,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
+//NOT for exam chilll
+
 class Node {
     int data;
     Node left, right;

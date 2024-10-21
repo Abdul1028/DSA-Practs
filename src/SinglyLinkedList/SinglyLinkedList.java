@@ -1,187 +1,196 @@
 package SinglyLinkedList;
-
 import java.util.Scanner;
+public class SinglyLinkedList {
+    class Node {
+        int data;
+        Node next;
 
-class Node {
-    int data;
-    Node next;
+        Node(int data) {
+            this.data = data;
+        }
 
-    Node(int data) {
-        this.data = data;
-        this.next = null;
+        Node(int data, Node next) {
+            this.data = data;
+            this.next = next;
+        }
     }
-}
 
-class SinglyLinkedList {
+    private Node tail;
     private Node head;
+    private int size;
 
-    // Add a node at the front of the list
     public void addFront(int data) {
         Node newNode = new Node(data);
         newNode.next = head;
         head = newNode;
+
+        if (tail == null) {
+            tail = head;
+        }
+        size++;
     }
 
-    // Add a node at the end of the list
-    public void addEnd(int data) {
+    public void addBack(int data) {
         Node newNode = new Node(data);
-        if (head == null) {
-            head = newNode;
-            return;
+        if (tail == null) {
+            head = tail = newNode;  // Handle empty list
+        } else {
+            tail.next = newNode;
+            tail = newNode;
         }
-
-        Node last = head;
-        while (last.next != null) {
-            last = last.next;
-        }
-        last.next = newNode;
+        size++;
     }
 
-    // Add a node at a specific position
+    public int deleteFront() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return -1;
+        }
+        int data = head.data;
+        head = head.next;
+        if (head == null) {  // If the list becomes empty
+            tail = null;
+        }
+        size--;
+        return data;
+    }
+
+    public int deleteBack() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return -1;
+        }
+        if (head.next == null) {  // Only one element in the list
+            int data = head.data;
+            head = tail = null;
+            size--;
+            return data;
+        }
+
+        Node secondLast = get(size - 2);
+        int data = tail.data;
+        secondLast.next = null;
+        tail = secondLast;
+        size--;
+        return data;
+    }
+
     public void addAtPosition(int data, int position) {
-        if (position == 1) {
+        if (position == 0) {
             addFront(data);
             return;
         }
-
-        Node newNode = new Node(data);
-        Node current = head;
-        int count = 1;
-
-        while (current != null && count < position - 1) {
-            current = current.next;
-            count++;
+        if (position >= size) {
+            addBack(data);
+            return;
         }
-
-        if (current == null) {
-            System.out.println("Position out of range.");
-        } else {
-            newNode.next = current.next;
-            current.next = newNode;
-        }
+        Node previous = get(position - 1);
+        Node newNode = new Node(data, previous.next);
+        previous.next = newNode;
+        size++;
     }
 
-    // Delete a node from the front
-    public void deleteFront() {
-        if (head == null) {
-            System.out.println("List is empty.");
-            return;
+    public int deleteAtPosition(int position) {
+        if (position < 0 || position >= size) {
+            System.out.println("Invalid position.");
+            return -1;
         }
-        head = head.next;
+        if (position == 0) {
+            return deleteFront();
+        }
+        Node previous = get(position - 1);
+        int data = previous.next.data;
+        previous.next = previous.next.next;
+        size--;
+        return data;
     }
 
-    // Delete a node from the end
-    public void deleteEnd() {
-        if (head == null) {
-            System.out.println("List is empty.");
-            return;
-        }
-
-        if (head.next == null) {
-            head = null;
-            return;
-        }
-
-        Node current = head;
-        while (current.next.next != null) {
-            current = current.next;
-        }
-        current.next = null;
-    }
-
-    // Delete a node at a specific position
-    public void deleteAtPosition(int position) {
-        if (head == null) {
-            System.out.println("List is empty.");
-            return;
-        }
-
-        if (position == 1) {
-            deleteFront();
-            return;
-        }
-
-        Node current = head;
-        int count = 1;
-
-        while (current != null && count < position - 1) {
-            current = current.next;
-            count++;
-        }
-
-        if (current == null || current.next == null) {
-            System.out.println("Position out of range.");
-        } else {
-            current.next = current.next.next;
-        }
-    }
-
-    // Display the list
     public void display() {
         if (head == null) {
             System.out.println("List is empty.");
             return;
         }
-
         Node current = head;
         while (current != null) {
-            System.out.print(current.data + " ");
+            System.out.print(current.data + " -> ");
             current = current.next;
         }
-        System.out.println();
+        System.out.println("END");
     }
 
-    // Menu-driven interface
+    public Node get(int index) {
+        if (index < 0 || index >= size) {
+            return null;
+        }
+        Node current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.next;
+        }
+        return current;
+    }
+
+    SinglyLinkedList() {
+        this.size = 0;
+    }
+
     public static void main(String[] args) {
-        SinglyLinkedList list = new SinglyLinkedList();
-        Scanner scanner = new Scanner(System.in);
+        SinglyLinkedList ll = new SinglyLinkedList();
+        Scanner sc = new Scanner(System.in);
         boolean flag = true;
 
         while (flag) {
             System.out.println("\nMenu:");
-            System.out.println("1. Add at front");
-            System.out.println("2. Add at end");
-            System.out.println("3. Add at position");
-            System.out.println("4. Delete front");
-            System.out.println("5. Delete end");
-            System.out.println("6. Delete at position");
-            System.out.println("7. Display list");
+            System.out.println("1. Add Front");
+            System.out.println("2. Add Back");
+            System.out.println("3. Delete Front");
+            System.out.println("4. Delete Back");
+            System.out.println("5. Add at Position");
+            System.out.println("6. Delete at Position");
+            System.out.println("7. Display");
             System.out.println("8. Exit");
             System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
+            int choice = sc.nextInt();
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter value to add at front: ");
-                    int dataFront = scanner.nextInt();
-                    list.addFront(dataFront);
+                    System.out.print("Enter data: ");
+                    int data = sc.nextInt();
+                    ll.addFront(data);
                     break;
                 case 2:
-                    System.out.print("Enter value to add at end: ");
-                    int dataEnd = scanner.nextInt();
-                    list.addEnd(dataEnd);
+                    System.out.print("Enter data: ");
+                    data = sc.nextInt();
+                    ll.addBack(data);
                     break;
                 case 3:
-                    System.out.print("Enter value to add: ");
-                    int dataPos = scanner.nextInt();
-                    System.out.print("Enter position: ");
-                    int pos = scanner.nextInt();
-                    list.addAtPosition(dataPos, pos);
+                    data = ll.deleteFront();
+                    if (data != -1) {
+                        System.out.println("Deleted from front: " + data);
+                    }
                     break;
                 case 4:
-                    list.deleteFront();
+                    data = ll.deleteBack();
+                    if (data != -1) {
+                        System.out.println("Deleted from back: " + data);
+                    }
                     break;
                 case 5:
-                    list.deleteEnd();
+                    System.out.print("Enter data: ");
+                    data = sc.nextInt();
+                    System.out.print("Enter position: ");
+                    int position = sc.nextInt();
+                    ll.addAtPosition(data, position);
                     break;
                 case 6:
-                    System.out.print("Enter position to delete: ");
-                    int deletePos = scanner.nextInt();
-                    list.deleteAtPosition(deletePos);
+                    System.out.print("Enter position: ");
+                    position = sc.nextInt();
+                    data = ll.deleteAtPosition(position);
+                    if (data != -1) {
+                        System.out.println("Deleted at position " + position + ": " + data);
+                    }
                     break;
                 case 7:
-                    System.out.println("Singly Linked List: ");
-                    list.display();
+                    ll.display();
                     break;
                 case 8:
                     flag = false;
@@ -191,6 +200,7 @@ class SinglyLinkedList {
                     System.out.println("Invalid choice. Please try again.");
             }
         }
-        scanner.close();
+
+        sc.close();
     }
 }
